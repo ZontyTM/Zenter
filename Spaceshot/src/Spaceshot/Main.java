@@ -27,7 +27,7 @@ public class Main {
 		static float timeSinceLastFrame, time, dif = 2;
 		
 		static int FrameX = 1280, FrameY = 720, SedgeY, SedgeX, edgeY, edgeX, whatmixer, seite = 1, lastseite = 1, 
-				StandardWidth = 1920, StandardHeight = 1080, what, cooldown = 0, volume = 40,
+				StandardWidth = 1920, StandardHeight = 1080, what, cooldown = 0, volume = 50,
 				displayMode, vollbild = 0, cdevice = 0, color[] = {127,127,127};
 		
 		static double buttonY = 1, buttonX = 1, buttonY2, buttonX2, buttonYA, buttonXA, menu = 0;
