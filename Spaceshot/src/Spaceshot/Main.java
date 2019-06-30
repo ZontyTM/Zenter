@@ -27,7 +27,7 @@ public class Main {
 		static float timeSinceLastFrame, time, dif = 2;
 		
 		static int FrameX = 1280, FrameY = 720, SedgeY, SedgeX, edgeY, edgeX, whatmixer, seite = 1, lastseite = 1, 
-				StandardWidth = 1920, StandardHeight = 1080, what, cooldown = 0, volume = 50,
+				StandardWidth = 1920, StandardHeight = 1080, what, cooldown = 0, volume = 40,
 				displayMode, vollbild = 0, cdevice = 0, color[] = {127,127,127};
 		
 		static double buttonY = 1, buttonX = 1, buttonY2, buttonX2, buttonYA, buttonXA, menu = 0;
@@ -244,14 +244,14 @@ public class Main {
 	}
 	private static void setControl() {
 		steuerung[0] = new Control(new String[]{"Vollbild","Fullscreen"}, KeyEvent.VK_F11, 1, 1);
-        steuerung[1] = new Control(new String[]{"Schieﬂen","Shoot"}, KeyEvent.VK_SPACE, 1, 2);
+        steuerung[1] = new Control(new String[]{"Schie√üen","Shoot"}, KeyEvent.VK_SPACE, 1, 2);
         steuerung[2] = new Control(new String[]{"Hoch","Up"}, KeyEvent.VK_W, 1, 3);
         steuerung[3] = new Control(new String[]{"Runter","Down"}, KeyEvent.VK_S, 1, 4);
         steuerung[4] = new Control(new String[]{"Links","Left"}, KeyEvent.VK_A, 1, 5);
         steuerung[5] = new Control(new String[]{"Rechts","Right"}, KeyEvent.VK_D, 1, 6);
         
         steuerung[6] = new Control(new String[]{"ESC"}, KeyEvent.VK_ESCAPE, 2, 1);
-        steuerung[7] = new Control(new String[]{"Best‰tigen","Confirm"}, KeyEvent.VK_ENTER, 2, 2);
+        steuerung[7] = new Control(new String[]{"Best√§tigen","Confirm"}, KeyEvent.VK_ENTER, 2, 2);
         steuerung[8] = new Control(new String[]{"Menu: Hoch","Menu: Up"}, KeyEvent.VK_UP, 2, 3);
         steuerung[9] = new Control(new String[]{"Menu: Runter","Menu: Down"}, KeyEvent.VK_DOWN, 2, 4);
         steuerung[10] = new Control(new String[]{"Menu: Links","Menu: Left"}, KeyEvent.VK_LEFT, 2, 5);
@@ -337,32 +337,32 @@ public class Main {
 		for (int i = 0; i <= Shop.getLength(); i++) {
 			BShop[i] = new Button(-180-64, -230+i*80, pow[i].getPowerup().getWidth(), pow[i].getPowerup().getHeight(), 1, (i+1));
 		}
-		BShop[Shop.getLength()+1] = new Button(new String[]{"Zur¸ck", "Back"}, -80, -80, "", 0.75f, 1, (Shop.getLength()+2), "End Back0");
+		BShop[Shop.getLength()+1] = new Button(new String[]{"Zur√ºck", "Back"}, -80, -80, "", 0.75f, 1, (Shop.getLength()+2), "End Back0");
 		
 		BSideSelection[0] = new Button(null, 225, -80, "R", 0.75f, 0, 0, "Normal EndY");
 		BSideSelection[1] = new Button(null, 125, -80, "L", 0.75f, 0, 0, "Normal EndY");
 		
-		BOptions[0] = new Button(new String[]{"Zur¸ck", "Back"}, -80, -80, "", 0.75f, 3, 4, "End Back2");
-		BOptions[1] = new Button(new String[]{"Zur¸cksetzen", "Reset"}, -240, -80, "", 0.75f, 1, 4, "EndY");
+		BOptions[0] = new Button(new String[]{"Zur√ºck", "Back"}, -80, -80, "", 0.75f, 3, 4, "End Back2");
+		BOptions[1] = new Button(new String[]{"Zur√ºcksetzen", "Reset"}, -240, -80, "", 0.75f, 1, 4, "EndY");
 		BOptions[2] = new Button(new String[]{"Letzes", "Last"}, 240, -80, "", 0.75f, 2, 4, "EndY");
 		
 		SHead[2] = new Schrift(new String[]{"Einstellungen","Preferences"}, StandardWidth/2, true, StandardHeight/2-330, true, 1.5, new Color(195, 195, 195));
 		BOptionsMenu[0] = new Button(new String[]{"Steuerung", "Controls"}, 0, -100, "", 1, 1, 1, "Hin2.1");
 		BOptionsMenu[1] = new Button(new String[]{"Ton", "Sounds"}, 0, 100, "", 1, 1, 2, "Hin2.2");
 		BOptionsMenu[2] = new Button(new String[]{"Grafik", "Graphics"}, 0, 300, "", 1, 1, 3, "Hin2.3");
-		BOptionsMenu[3] = new Button(new String[]{"Zur¸ck", "Back"}, -80, -80, "", 0.75f, 1, 4, "End Back0");
+		BOptionsMenu[3] = new Button(new String[]{"Zur√ºck", "Back"}, -80, -80, "", 0.75f, 1, 4, "End Back0");
 		
 		SHead[3] = new Schrift(new String[]{"Steuerung","Controls"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
-		SSteuerung = new Schrift(new String[]{"Dr¸cke eine beliebige Taste","Press any key"}, 0, 0, 0.27);
+		SSteuerung = new Schrift(new String[]{"Dr√ºcke eine beliebige Taste","Press any key"}, 0, 0, 0.27);
 
 		SHead[4] = new Schrift(new String[]{"Ton","Sounds"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
 		SRMaster[0] = new Slide_control("Master", new Color(195, 195, 195), 0, 0, "Schieberegler", 1, 1, 1, volume);
         BSounds[1] = new Button(new String[]{szmixers[whatmixer]}, 0, 200, "", 1f, 1, 2);
-		BSounds[0] = new Button(new String[]{"Zur¸ck","Back"}, -80, -80, "", 0.75f, 1, 3, "End Back2");
+		BSounds[0] = new Button(new String[]{"Zur√ºck","Back"}, -80, -80, "", 0.75f, 1, 3, "End Back2");
 
 		SHead[5] = new Schrift(new String[]{"Grafik","Graphics"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
         BGrafik[1] = new Button(new String[]{String.valueOf(displayModes[displayMode].getWidth())}, new String[]{"Breite:","Width:"}, -275, -100, "", 0.85f, 1, 1);
-        BGrafik[2] = new Button(new String[]{String.valueOf(displayModes[displayMode].getHeight())}, new String[]{"Hˆhe:","Height:"}, 275, -100, "", 0.85f, 2, 1);
+        BGrafik[2] = new Button(new String[]{String.valueOf(displayModes[displayMode].getHeight())}, new String[]{"H√∂he:","Height:"}, 275, -100, "", 0.85f, 2, 1);
         BGrafik[3] = new Button(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())}, new String[]{"FPS:"}, -275, 75, "", 0.85f, 1, 2);
         BGrafik[4] = new Button(new String[]{String.valueOf(cdevice)}, new String[]{"Monitor:","Screen:"}, 275, 75, "", 0.85f, 2, 2);
 		BGrafik[5] = new Button(null, 225, -80, "R", 0.75f, 1, 4, "Normal EndY");
@@ -375,17 +375,17 @@ public class Main {
 				BGrafik[i].setVisible(true);
 			}
 		}
-		BGrafik[0] = new Button(new String[]{"Zur¸ck","Back"}, -80, -80, "", 0.75f, 2, 4, "End Back2");
+		BGrafik[0] = new Button(new String[]{"Zur√ºck","Back"}, -80, -80, "", 0.75f, 2, 4, "End Back2");
         
         SEnde[0] = new Schrift(new String[]{"Willst du wirklich beenden?","Do you really want to quit?"}, StandardWidth/2, true, StandardHeight/2-100, true, 0.75, new Color(195, 195, 195));
         BEnde[0] = new Button(new String[]{"Ja","Yes"}, -240, 100, "", 0.85f, 1, 1, "Hin-1");
         BEnde[1] = new Button(new String[]{"Nein","No"}, 240, 100, "", 0.85f, 2, 1, "Back0");
         
-        BRaumschiff[0] = new Button(new String[]{"Zur¸ck","Back"}, -80, -80, "", 0.75f, 2, 4, "End Back0");
+        BRaumschiff[0] = new Button(new String[]{"Zur√ºck","Back"}, -80, -80, "", 0.75f, 2, 4, "End Back0");
         BRaumschiff[1] = new Button(new String[]{"Starten","Start"}, -100-BRaumschiff[0].getWidth(), -80, "", 0.75f, 1, 4, "End Hin1.1");
         SHead[6] = new Schrift(new String[]{"Raumschiffauswahl","Spaceship Selection"}, StandardWidth/2, true, StandardHeight/2-330, true, 1.5, new Color(195, 195, 195));
         SRColor[0] = new Slide_control("Rot", Color.red, -300, -100, "Schieberegler", 1, 1, 1, (int)(color[0]/2.54));
-        SRColor[1] = new Slide_control("Gr¸n", Color.GREEN, -300, 100, "Schieberegler", 1, 1, 2, (int)(color[1]/2.54));
+        SRColor[1] = new Slide_control("Gr√ºn", Color.GREEN, -300, 100, "Schieberegler", 1, 1, 2, (int)(color[1]/2.54));
         SRColor[2] = new Slide_control("Blau", Color.BLUE, -300, 300, "Schieberegler", 1, 1, 3, (int)(color[2]/2.54));
 
         BGame[0] = new Button(new String[]{"X"}, Color.WHITE, -1, -StandardHeight+90, "Quadrat", 0.75f, 1, 1, "Back1");
