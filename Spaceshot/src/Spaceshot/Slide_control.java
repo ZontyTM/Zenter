@@ -16,35 +16,35 @@ public class Slide_control {
 	private Color c;
 
 	
-	public Slide_control(String name, Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, int wert){
+	public Slide_control(String name[], Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, int wert){
 		this(name, c, x, y, buttontext, scale, netzX, netzY, "", 0, 0, -1, wert);
 	}
 	
-	public Slide_control(String name, Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, int page, int wert){
+	public Slide_control(String name[], Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, int page, int wert){
 		this(name, c, x, y, buttontext, scale, netzX, netzY, "", 0, 0, page, wert);
 	}
 	
-	public Slide_control(String name, Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int wert){
+	public Slide_control(String name[], Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int wert){
 		this(name, c, x, y, buttontext, scale, netzX, netzY, what, 0, 0, -1, wert);
 	}
 	
-	public Slide_control(String name, Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int page, int wert){
+	public Slide_control(String name[], Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int page, int wert){
 		this(name, c, x, y, buttontext, scale, netzX, netzY, what, 0, 0, page, wert);
 	}
 	
-	public Slide_control(String name, Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, int xminus, int yminus, int wert){
+	public Slide_control(String name[], Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, int xminus, int yminus, int wert){
 		this(name, c, x, y, buttontext, scale, netzX, netzY, "", xminus, yminus, -1, wert);
 	}
 	
-	public Slide_control(String name, Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, int xminus, int yminus, int page, int wert){
+	public Slide_control(String name[], Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, int xminus, int yminus, int page, int wert){
 		this(name, c, x, y, buttontext, scale, netzX, netzY, "", xminus, yminus, page, wert);
 	}
 	
-	public Slide_control(String name, Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int xminus, int yminus, int wert){
+	public Slide_control(String name[], Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int xminus, int yminus, int wert){
 		this(name, c, x, y, buttontext, scale, netzX, netzY, what, xminus, yminus, -1, wert);
 	}
 	
-	public Slide_control(String name, Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int xminus, int yminus, int page, int wert){ 
+	public Slide_control(String name[], Color c, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int xminus, int yminus, int page, int wert){ 
 		try {
 			schieberegler[0] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Schieberegler/" + buttontext + "A.png"));
 			schieberegler[1] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Schieberegler/" + buttontext + "D.png"));
@@ -71,11 +71,11 @@ public class Slide_control {
 		this.deaktiviert2 = false;
 		this.width = (int)(schieberegler[0].getWidth()*scale);
 		this.height = (int)(schieberegler[0].getHeight()*scale);
-		this.name = name;
+		this.name = name[Button.getLang()];
 		if(what.contains("SchriftOben")){
-			this.text = new Schrift(new String[]{name}, this.x, this.y-23, 0.3*scale, c);
+			this.text = new Schrift(name, this.x, this.y-23, 0.3*scale, c);
 		}else{
-			this.text = new Schrift(new String[]{name}, this.x+(int)(schieberegler[2].getWidth()*scale)/2, true, (int) (this.y+this.height/2-60*scale), true, 0.45*scale, c);
+			this.text = new Schrift(name, this.x+(int)(schieberegler[2].getWidth()*scale)/2, true, (int) (this.y+this.height/2-60*scale), true, 0.45*scale, c);
 		}
 		this.scale = scale;
 		this.netzX = netzX;

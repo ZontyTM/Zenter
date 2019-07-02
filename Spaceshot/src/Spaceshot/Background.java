@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 public class Background{
 	private float bildX, bildX2;
 	private BufferedImage background[] = new BufferedImage[8];
-	private String name[] = {"Default","Blue","Red","Gray","Colorful","Fade","Epic","End"};
+	private String name[][] = {{"Default","Standard"},{"Blue","Blau"},{"Red","Rot"},{"Gray","Grau"},{"Colorful","Farbenfroh"},{"Fade","Farbwechsel"},{"Epic","Episch"},{"End","Ende"}};
 	private Random r = new Random();
 	private int actbg = r.nextInt(7);
 	
@@ -42,8 +42,8 @@ public class Background{
 		}catch(Exception e) {}
 	}
 
-	public String getName(){
-		return name[actbg];
+	public String getName(int i){
+		return name[actbg][i];
 	}
 	public int getActbg(){
 		return actbg;
