@@ -15,6 +15,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -236,7 +237,23 @@ public class Frame extends JFrame{
 				for (int i = 0; i < Main.enemys.size(); i++) {
 					BildDraw(Main.enemys.get(i).getX(), Main.enemys.get(i).getY(), Main.enemys.get(i).getPic(), Main.enemys.get(i).getScale());
 					if(Main.enemys.get(i).isBoss()) {
-						BildDraw(Main.enemys.get(i).getX(), Main.enemys.get(i).getY(), Main.enemys.get(i).getLightning(), Main.enemys.get(i).getScale());
+						int tempX = Main.enemys.get(i).getX()-5+(int)((Main.enemys.get(i).getType()+1)*6*Main.enemys.get(i).getScale());
+						
+						BildDraw(tempX, Main.enemys.get(i).getY()-20,Main.enemys.get(i).getBossbarBg(), Main.enemys.get(i).getScale()*4*Main.enemys.get(i).getMaxLife(),
+								Main.enemys.get(i).getScale()*3);
+						
+						BildDraw(tempX, Main.enemys.get(i).getY()-20,Main.enemys.get(i).getBossbar(), 
+								Main.enemys.get(i).getScale()*4*Main.enemys.get(i).getLife(), Main.enemys.get(i).getScale()*3);
+						
+						BildDraw(tempX-1, Main.enemys.get(i).getY()-21,Main.enemys.get(i).getBossbarFg(), 
+								(Main.enemys.get(i).getMaxLife()*0.125f), 2f);
+						
+						
+						if(Enemy.getCount() > 1) {
+							g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Main.enemys.get(i).getActLightning()));
+							BildDraw(Main.enemys.get(i).getX(), Main.enemys.get(i).getY(), Main.enemys.get(i).getLightning(), Main.enemys.get(i).getScale());
+							g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+						}
 					}
 				}
 				
@@ -287,6 +304,7 @@ public class Frame extends JFrame{
 						BildDraw(distance, 150, p.getCoin(c), 0.6f);
 					}
 				}
+				
 			}else {
 				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, p.getCd()*0.2f));
 				BildDraw(p.getX()-(int)((p.getExplosion().getWidth()/2)*p.getScale()), 
@@ -362,7 +380,7 @@ public class Frame extends JFrame{
 			}
 			if(Main.enemys.size() != 0 && Enemy.getBoss()) {
 				TextDraw(10, 710,"Count: " + Enemy.getCount());
-				TextDraw(10, 760,"Live: " + Main.enemys.get(0).getLive());
+				TextDraw(10, 760,"Live: " + Main.enemys.get(0).getLife());
 			}
 			TextDraw(10, 810,"Cd: " + Main.p.getCd2());
 			TextDraw(10, 860,"FPS: " + Tfps);
@@ -398,6 +416,13 @@ public class Frame extends JFrame{
 		if(x >= -img.getWidth() && x <= Main.StandardWidth && y >= -img.getHeight() && y <= Main.StandardHeight) {
 			AffineTransform at = AffineTransform.getTranslateInstance(x+Main.edgeX/scaleX, y+Main.edgeY/scaleY);
 			at.scale(scale, scale);
+			g2d.drawImage(img, at, null);
+		}
+	}
+	public void BildDraw(int x, int y, BufferedImage img, double scaleX, double scaleY){
+		if(x >= -img.getWidth() && x <= Main.StandardWidth && y >= -img.getHeight() && y <= Main.StandardHeight) {
+			AffineTransform at = AffineTransform.getTranslateInstance(x+Main.edgeX/scaleX, y+Main.edgeY/scaleY);
+			at.scale(scaleX, scaleY);
 			g2d.drawImage(img, at, null);
 		}
 	}
