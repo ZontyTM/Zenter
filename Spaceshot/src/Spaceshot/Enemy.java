@@ -10,9 +10,9 @@ public class Enemy {
 	private static boolean boss, bossIsStart;
 	private static int count, spawned;
 	private boolean isBoss; 
-	private float scale, act, deadCd = 1, cd;
+	private float scale, act, deadCd = 1, cd, actLightning;
 	private int x, y, type, speed, live;
-	private BufferedImage pic[] = new BufferedImage[3], dead;
+	private BufferedImage pic[] = new BufferedImage[3], dead, lightning[];
 	private Random r = new Random();
 
 	public Enemy(int type) {
@@ -33,6 +33,11 @@ public class Enemy {
 				boss = true;
 				live = 3+(this.type*2);
 				//Main.p.addShot(live);
+				this.lightning = new BufferedImage[20];
+				actLightning = 0;
+				for (int i = 0; i < 24; i++) {
+					this.lightning[i] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/lightning/lightning_" + (i+1) + ".png"));
+				}
 			}
 			for (int i = 0; i < pic.length; i++) {
 				this.pic[i] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/" + this.type + "Monster" + (i+1) + ".png"));
@@ -115,7 +120,7 @@ public class Enemy {
 							temp = 3.6f;
 						}
 						Main.bullets.add(new Bullet(this.x+(int)(this.pic[0].getWidth()*scale)/2,this.y+(int)(this.pic[0].getHeight()*scale)/2,900,4,temp));
-						this.cd = 4-speed/150;
+						this.cd = 6-speed/50;
 					}else {
 						this.cd -= Main.timeSinceLastFrame;
 					}
@@ -123,14 +128,18 @@ public class Enemy {
 				this.x -= this.speed*Main.timeSinceLastFrame;
 				this.act += this.speed/150*Main.timeSinceLastFrame;
 				if((int)act > 2) {this.act = Main.timeSinceLastFrame;}
+				if(isBoss) {
+					this.actLightning += this.speed/75*Main.timeSinceLastFrame;
+					if((int)actLightning > 23) {this.actLightning = Main.timeSinceLastFrame;}
+				}
 				if(this.x <= -(this.pic[0].getWidth()*scale)) {
 					if(boss && !isBoss) {
 						Main.enemys.remove(this);
 					}else {
 						if(isBoss) {
-							int temp = (1+(int)(count/5));
-							if(temp < 1) {
-								temp = 1;
+							int temp = (2+(int)(count/5));
+							if(temp < 2) {
+								temp = 2;
 							}
 							Main.p.addShot(temp);
 						}
@@ -151,7 +160,7 @@ public class Enemy {
 				}
 			}else if(!bossIsStart && isBoss && Main.enemys.size() == 1){
 				bossIsStart = true;
-				System.out.println("test");
+				//System.out.println("test");
 			}
 		}else {
 			this.deadCd -= Main.timeSinceLastFrame;
@@ -184,11 +193,18 @@ public class Enemy {
 		}
 	}
 	
+	public boolean isBoss() {
+		return isBoss;
+	}
+	
 	public int getLive() {
 		return live;
 	}
 	public static boolean getBoss() {
 		return boss;
+	}
+	public static int getCount() {
+		return count;
 	}
 	public static void setBoss(boolean b) {
 		boss = b;
@@ -225,5 +241,8 @@ public class Enemy {
 			return pic[2];
 		}
 		return pic[(int)act];
+	}
+	public BufferedImage getLightning() {
+		return lightning[(int) actLightning];
 	}
 }

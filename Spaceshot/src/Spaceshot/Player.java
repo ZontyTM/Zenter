@@ -360,7 +360,7 @@ public class Player {
 	public void addShot() {
 		if(!(Main.pow[6] != null && Main.pow[6].hasPlayer()) 
 		&& !(Main.pow[7] != null && Main.pow[7].hasPlayer())) {
-			shots += 1;
+			shots++;
 		}
 	}
 	public void addShot(int i) {

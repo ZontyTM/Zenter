@@ -563,9 +563,12 @@ public class Main {
 					if(!Shop.all() && r.nextInt(30) == 0) {
 						pow[9].respawn();
 					}
-					if(!Enemy.getBoss() && r.nextInt(50) == 0) {//40
-						enemys.add(new Enemy(5));
-					}
+//					if(!Enemy.getBoss() && r.nextInt(50) == 0) {//40
+//						enemys.add(new Enemy(5));
+//					}
+				}
+				if(!Enemy.getBoss()) {
+					enemys.add(new Enemy(5));
 				}
 				
 				if(r.nextInt(15) == 0) {

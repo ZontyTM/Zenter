@@ -235,6 +235,9 @@ public class Frame extends JFrame{
 				}
 				for (int i = 0; i < Main.enemys.size(); i++) {
 					BildDraw(Main.enemys.get(i).getX(), Main.enemys.get(i).getY(), Main.enemys.get(i).getPic(), Main.enemys.get(i).getScale());
+					if(Main.enemys.get(i).isBoss()) {
+						BildDraw(Main.enemys.get(i).getX(), Main.enemys.get(i).getY(), Main.enemys.get(i).getLightning(), Main.enemys.get(i).getScale());
+					}
 				}
 				
 				int cnt = 0;
@@ -357,7 +360,10 @@ public class Frame extends JFrame{
 				fpsCd = 0.5f; 
 				Tfps = (int)(1/(Main.timeSinceLastFrame));
 			}
-			if(Main.enemys.size() != 0 && Enemy.getBoss()) {TextDraw(10, 760,"Live: " + Main.enemys.get(0).getLive());}
+			if(Main.enemys.size() != 0 && Enemy.getBoss()) {
+				TextDraw(10, 710,"Count: " + Enemy.getCount());
+				TextDraw(10, 760,"Live: " + Main.enemys.get(0).getLive());
+			}
 			TextDraw(10, 810,"Cd: " + Main.p.getCd2());
 			TextDraw(10, 860,"FPS: " + Tfps);
 			TextDraw(10, 910,"Time: " + Main.time);
