@@ -299,6 +299,7 @@ public class Player {
 				Main.pow[1].rexist();
 			}
 			if(lives == 0) {
+				Achievement.add(4);
 				Main.saveSettings();
 				cd = 5;
 				setExplosion();
@@ -355,6 +356,9 @@ public class Player {
 	}
 	public void setCoinC(boolean b){
 		coinC = b;
+		if(coinC) {
+			Achievement.add(9);
+		}
 	}
 	
 	public void addShot() {
@@ -374,11 +378,15 @@ public class Player {
 	}
 	public void addKill() {
 		kills += 1;
+		if(kills > Achievement.get(1)) {Achievement.set(1, kills);}
 	}
 	public void addCoin() {
-		setCoin(getCoins()+1);
+		addCoin(1);
 	}
 	public void addCoin(int i) {
-		setCoin(getCoins()+i);
+		int temp = (getCoins()+i);
+		setCoin(temp);
+		Achievement.addM(7, i);
+		if(temp > Achievement.get(8)) {Achievement.set(8, temp);}
 	}
 }

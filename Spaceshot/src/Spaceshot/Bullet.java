@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class Bullet {
 	private float scale, act;
-	private int x, y, speed, hitbox[] = {3,7,30,9}, type, ract;
+	private int x, y, speed, hitbox[] = {3,7,30,9}, type, ract, kills;
 	private BufferedImage pic[] = new BufferedImage[3];
 	private Rectangle bounding;
 	
@@ -54,6 +54,7 @@ public class Bullet {
 			
 			for (int i = 0; i < Main.bullets.size(); i++) {
 				if(type != 3 && Main.bullets.get(i).getType() != 3 && i != Main.bullets.indexOf(this) && Player.Collison(bounding, Main.bullets.get(i).getBounding())){
+					Achievement.add(2, 1); //block a shot (100)
 					Main.PlaySound(Main.explosion);
 					Main.bullets.get(i).setScale(1.79f);
 					setScale(1.79f);
@@ -91,5 +92,10 @@ public class Bullet {
 	}
 	public BufferedImage getPic() {
 		return pic[(int)(act)];
+	}
+	
+	public void addKill() {
+		kills++;
+		if(kills > Achievement.get(5)) {Achievement.set(5, kills);}
 	}
 }

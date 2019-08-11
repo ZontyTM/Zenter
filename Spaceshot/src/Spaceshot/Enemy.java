@@ -40,11 +40,10 @@ public class Enemy {
 				for (int i = 0; i < lightning.length; i++) {
 					this.lightning[i] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/lightning/lightning_" + (i+1) + ".png"));
 				}
-				this.bossbar = new BufferedImage[6];
-				for (int i = 0; i < 2; i++) {
-					this.bossbar[i] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/bossbar_" + i + ".png"));
-				}
-				this.bossbar[5] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/bossbar_5.png"));
+				this.bossbar = new BufferedImage[3];
+				this.bossbar[0] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/bossbar_0.png"));
+				this.bossbar[1] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/bossbar_" + this.type + ".png"));
+				this.bossbar[2] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/bossbar_5.png"));
 			}
 			for (int i = 0; i < pic.length; i++) {
 				this.pic[i] = ImageIO.read(Button.class.getClassLoader().getResourceAsStream("Textures/Monster/" + this.type + "Monster" + (i+1) + ".png"));
@@ -99,6 +98,7 @@ public class Enemy {
 	}
 	
 	public void update() {
+		
 		if(deadCd == 1 || deadCd == 0.5) {
 			if(!(!bossIsStart && isBoss)) {
 				if(isBoss && spawned != count) {
@@ -145,15 +145,15 @@ public class Enemy {
 				this.act += this.speed/150*Main.timeSinceLastFrame;
 				if((int)act > 2) {this.act = Main.timeSinceLastFrame;}
 				if(isBoss && count != -1) {
-					this.actLightning += 10*Main.timeSinceLastFrame;
+					this.actLightning += (5+count/2)*Main.timeSinceLastFrame;
 					if((int)actLightning > (lightning.length-1)) {this.actLightning = Main.timeSinceLastFrame;}
 					if(r.nextInt(3) == 1) {
 						if(r.nextInt(2) == 1 && alphaLightning < 0.9) {
 							alphaLightning += 0.1f;
-							if(alphaLightning > 0.9) {this.alphaLightning = 0.2f;}
+							if(alphaLightning > 0.7) {this.alphaLightning = 0.2f;}
 						}else if (alphaLightning > 0.1){
 							alphaLightning -= 0.1f;
-							if(alphaLightning < 0.2) {this.alphaLightning = 0.9f;}
+							if(alphaLightning < 0.2) {this.alphaLightning = 0.7f;}
 						}
 					}
 				}
@@ -161,6 +161,7 @@ public class Enemy {
 					if(boss && !isBoss) {
 						Main.enemys.remove(this);
 					}else {
+						Achievement.add(3);
 						reset();
 					}
 				}
@@ -170,7 +171,13 @@ public class Enemy {
 							count--;
 						}
 						setKill();
+
+						if(Main.bullets.get(j).getType() == 4) {Achievement.add(2, 2);} //enemies killed by yellow (200)
+						
 						if(Main.bullets.get(j).getType() != 1 && Main.bullets.get(j).getType() != 12) {Main.bullets.remove(j);}
+						else {
+							Main.bullets.get(j).addKill();
+						}
 					}else if (Main.bullets.get(j).getType() == 4 && Player.Collison(Main.bullets.get(j).getBounding(), Main.p.getBounding())){
 						Main.bullets.remove(j);
 						Main.p.setHit();
@@ -199,26 +206,35 @@ public class Enemy {
 			}
 		}
 	}
+	
 	public void setKill() {
+		Achievement.add(0, (type+1));		//purple, blue,  red, yellow kills (1000)
+		Achievement.add(0, 1);			//first blood
 		if(boss && isBoss && life > 1) {
-			deadCd = 3;
-			if(count <= 1 && deadCd != 0.5) {
-				life--;
+			if(count <= 1) {
+				deadCd = 3;
+				if(count <= 1 && deadCd != 0.5) {
+					life--;
+				}
 			}
 		}else {
 			if(deadCd == 1) {
+				life--;
 				this.deadCd -= Main.timeSinceLastFrame;
 				Main.p.addKill();
+				if(isBoss) {Achievement.add(6);}
 			}
 		}
 	}
-	
 	public boolean isBoss() {
 		return isBoss;
 	}
 	
 	public int getLife() {
 		return life;
+	}
+	public float getDeadCd() {
+		return deadCd;
 	}
 	public static boolean getBoss() {
 		return boss;
@@ -272,12 +288,12 @@ public class Enemy {
 		return bossbar[1];
 	}
 	public BufferedImage getBossbarFg() {
-		return bossbar[5];
+		return bossbar[2];
 	}
 	public BufferedImage getLightning() {
 		return lightning[(int) actLightning];
 	}
 	public float getActLightning() {
-		return alphaLightning;
+		return alphaLightning*(count*0.0625f);
 	}
 }

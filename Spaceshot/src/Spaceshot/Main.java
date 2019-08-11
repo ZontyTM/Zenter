@@ -49,7 +49,7 @@ public class Main {
 		static List<Enemy> enemys = new LinkedList<Enemy>();
         static List<Line> line = new LinkedList<Line>();
     	static List<Mixer> zmixers = new LinkedList<Mixer>();
- 	    static String szmixers[], audiogeret = null, click, shot, explosion;
+ 	    static String szmixers[], audiogeret = null, click, shot, explosion, achievement;
 		static Powerup pow[] = new Powerup[10];
 		static Background b = new Background();
 		static Mixer audio;
@@ -300,7 +300,7 @@ public class Main {
 			                    pb.setValue(value);
 			                }
 			        	}
-		    		} catch (Exception e) {System.err.println(e);}
+		    		} catch (Exception e) {e.printStackTrace();}
 		        }
 	        }	
 	    }
@@ -327,6 +327,7 @@ public class Main {
         click = "click.wav";
         shot = "shot_sound_0.wav";
         explosion = "explosion.wav";
+        achievement = "achievement.wav";
 	}
 	private static void setButtons() {
 		SHead[0] = new Schrift(new String[]{"Spaceshot"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
@@ -404,6 +405,7 @@ public class Main {
 				s = new Scanner(file);
 				Button.setLang(s.nextInt());
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
         file.setReadable(false);
@@ -411,7 +413,6 @@ public class Main {
 	private static void loadSettings() {
         Scanner s;
         file.setReadable(true);
-        
 		if(file.exists()){
 			try {
 				s = new Scanner(file);
@@ -432,8 +433,17 @@ public class Main {
 				}
 				Shop.setAll();
 				p.setCoinC(s.nextBoolean());
+				
+				//Achievements
+				s.next();
+				Achievement.setLev(0, s.nextInt());
+				for(int i = 0; i < Achievement.count(); i++) {
+					if(i!=9) {Achievement.set(i, s.nextInt());}
+				}
+				Achievement.setLev(Achievement.count()-1, s.nextInt());
 				s.close();
 			} catch (Exception e) {
+				e.printStackTrace();
 				saveSettings();
 			}
 		}else {
@@ -464,6 +474,14 @@ public class Main {
 				fw.write("\n"+Shop.getReroll(i));
 			}
 			fw.write("\n"+p.getCoinC());
+			
+			//Achievements
+			fw.write("\n\nAchievements:");
+			fw.write("\n"+Achievement.getLev(0));
+			for(int i = 0; i < Achievement.count(); i++) {
+				if(i!=9) {fw.write("\n"+Achievement.get(i));}
+			}
+			fw.write("\n"+Achievement.getLev(Achievement.count()-1));
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -563,17 +581,18 @@ public class Main {
 					if(!Shop.all() && r.nextInt(30) == 0) {
 						pow[9].respawn();
 					}
-//					if(!Enemy.getBoss() && r.nextInt(50) == 0) {//40
-//						enemys.add(new Enemy(5));
-//					}
+					if(!Enemy.getBoss() && r.nextInt(50) == 0) {//40
+						enemys.add(new Enemy(5));
+					}
 				}
-				if(!Enemy.getBoss()) {
-					enemys.add(new Enemy(5));
-				}
-				
+//				if(!Enemy.getBoss()) {
+//					enemys.add(new Enemy(5));
+//				}
+
+				pow[8].respawn();
 				if(r.nextInt(15) == 0) {
 					if(Shop.getOne() != -1 && pow[Shop.getLast()] == null) {
-						pow[Shop.getLast()].respawn();;
+						pow[Shop.getLast()].respawn();
 					}
 				}
 	    		if(dif>0.5) {dif-=timeSinceLastFrame/10;}
@@ -749,7 +768,9 @@ public class Main {
     		Clip clip = AudioSystem.getClip(audio.getMixerInfo());
 			clip.open(audioIn);
 			clip.start();
-		}catch(Exception e){System.err.println(e);}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	public static Button[] setArray(Button[] buttons, Button[] buttonsS, Button[] buttonsO){

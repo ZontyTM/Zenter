@@ -108,7 +108,7 @@ public class Shop {
 				}
 			}
 			
-			setAll();
+			if(!all) {setAll();}
 
 			if(Main.pow[9] != null && Main.pow[9].hasPlayer()) {
 				Shop.resetSale();
@@ -187,12 +187,24 @@ public class Shop {
 		}
 	}
 	
-	public static void setAll() {
-		all = true;
+	public static int getCount() {
+		int temp = 0;
 		for (int j = 0; j < reroll.length; j++) {
-			if(reroll[j] != 3) {
-				all = false;
-			}
+			temp+=reroll[j];
+		}
+		Achievement.set(9, temp);
+		if(Main.p.getCoinC()) {
+			Achievement.add(9);
+		}
+		return temp;
+		
+	}
+	
+	public static void setAll() {
+		if(getCount() == 25) {
+			all = true;
+		}else {
+			all = false;
 		}
 	}
 	public static boolean all() {
