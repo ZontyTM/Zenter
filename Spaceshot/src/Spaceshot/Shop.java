@@ -192,9 +192,9 @@ public class Shop {
 		for (int j = 0; j < reroll.length; j++) {
 			temp+=reroll[j];
 		}
-		Achievement.set(9, temp);
+		Achievement.fset(9, temp);
 		if(Main.p.getCoinC()) {
-			Achievement.add(9);
+			Achievement.fadd(9);
 		}
 		return temp;
 		

@@ -14,25 +14,12 @@ public class Achievement {
 			{"Let's go shopping", "Make it easier", "I want it all!"},						//buy upgrades (1, 10, 25)
 			{"Full entertainment", "Make your own rules", "I like the music!", "SPACESHOT"}	//fullscreen, change the configs, 100% music, click on "Spaceshot" in main menu
 			};
-//	private static int end[][] = {
-//			{1, 1, 750, 625, 500, 375}, //x//first blood, purple, blue, red, yellow kills (1000)
-//			{1, 100, 250, 500, 1000},//kills in one round (100, 250, 500, 1000)
-//			{1, 100, 200},//block a shot (100) & enemies killed (200) by yellow
-//			{1, 100, 500, 1000},//let enemies through (100, 500, 1000)
-//			{1, 1, 500, 1000},//die (1, 500, 1000)
-//			{1, 2, 3, 4, 5},//multi kills with piercing (2, 3, 4, 5)
-//			{1, 1, 50},//kill a boss (1, 50)
-//			{1, 1, 1000, 5000},//earn coins (1, 1000, 5000)
-//			{1, 1000, 2000},//have coins (1000, 2000)
-//			{1, 1, 10, 25},//buy upgrades (1, 10, 25)
-//			{1, 1, 1, 1, 1} //x//fullscreen, change the configs, 100% music, click on "Spaceshot" in main menu
-//			};
 	private static int end[][] = {
-			{1, 1, 1, 1, 1, 1}, //x//first blood, purple, blue, red, yellow kills (1000)
-			{1, 2, 3, 5, 10},//kills in one round (100, 250, 500, 1000)
-			{1, 1, 2},//block a shot (100) & enemies killed (200) by yellow
+			{1, 1, 750, 625, 500, 375}, //x//first blood, purple, blue, red, yellow kills (1000)
+			{1, 100, 250, 500, 1000},//kills in one round (100, 250, 500, 1000)
+			{1, 100, 200},//block a shot (100) & enemies killed (200) by yellow
 			{1, 100, 500, 1000},//let enemies through (100, 500, 1000)
-			{1, 1, 5, 10},//die (1, 500, 1000)
+			{1, 1, 500, 1000},//die (1, 500, 1000)
 			{1, 2, 3, 4, 5},//multi kills with piercing (2, 3, 4, 5)
 			{1, 1, 50},//kill a boss (1, 50)
 			{1, 1, 1000, 5000},//earn coins (1, 1000, 5000)
@@ -51,32 +38,53 @@ public class Achievement {
 		return end[x][0];
 	}
 	
-	
-	private static void test(int x) {
+	private static void test(int x, boolean b) {
 		if(end[x][0] != -1 && progress[x] >= getEnd(x)) {
-			if(Main.menu == 1.1) {Main.PlaySound(Main.achievement);}
+			if(b){Main.PlaySound(Main.achievement);}
 			end[x][0]++;
 			if(end[x][0] >= (end[x].length)) {
 				end[x][0] = -1;
-			}else if(progress[x] >= getEnd(x)){
-				test(x);
-			}else if(x == 0 || (x == 2 && progress[x] <= 1) || x == (count()-1)) {
+				
+			}else if((x == 0) || ((x == 2 && progress[x] <= 1) && (progress[x] < getEnd(x)))  || (x == (count()-1))) {
 				progress[x] = 0;
+				
+			}else if(progress[x] >= getEnd(x)){
+				test(x,b);
 			}
 		}
 	}
 	
-	public static void set(int x, int b) {
+	public static void fset(int x, int b) {
 		progress[x] = b;
-		test(x);
-	}
-	public static void addM(int x, int y) {
-		if(progress[x] != -1) {
-			set(x,(progress[x]+y));
+		if((x != 0) && (x != (count()-1))) {
+			test(x,false);
 		}
 	}
+
+	public static void set(int x, int y) {
+		set(x,y,true);
+	}
+	public static void set(int x, int y, boolean b) {
+		progress[x] = y;
+		test(x,true);
+	}
+	
+	public static void addM(int x, int y) {
+		addM(x,y,true);
+	}
+	public static void addM(int x, int y, boolean b) {
+		if(progress[x] != -1) {
+			set(x,(progress[x]+y),b);
+		}
+	}
+	
+	public static void fadd(int x) {
+		addM(x,1,false);
+	}
+	
+	
 	public static void add(int x) {
-		addM(x,1);
+		addM(x,1,true);
 	}
 	public static void add(int x, int y) {
 		if(y == (end[x][0])) {

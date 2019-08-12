@@ -209,7 +209,7 @@ public class Enemy {
 	
 	public void setKill() {
 		Achievement.add(0, (type+1));		//purple, blue,  red, yellow kills (1000)
-		Achievement.add(0, 1);			//first blood
+		Achievement.add(0, 1);				//first blood
 		if(boss && isBoss && life > 1) {
 			if(count <= 1) {
 				deadCd = 3;
@@ -222,7 +222,10 @@ public class Enemy {
 				life--;
 				this.deadCd -= Main.timeSinceLastFrame;
 				Main.p.addKill();
-				if(isBoss) {Achievement.add(6);}
+				if(isBoss) {
+					Achievement.add(6);
+					Main.p.addCoin(10+r.nextInt(21));
+				}
 			}
 		}
 	}

@@ -303,6 +303,8 @@ public class Player {
 				Main.saveSettings();
 				cd = 5;
 				setExplosion();
+				Main.song.stop();
+				Main.first = true;
 				Main.PlaySound(Main.explosion);
 				x+=raumschiff[0].getWidth()/2*scale;
 				y+=raumschiff[0].getHeight()/2*scale;

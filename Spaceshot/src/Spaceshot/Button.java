@@ -231,12 +231,16 @@ public class Button {
 		return button[2];
 	}
 	
-	public boolean isOver() {
-		if(Main.f.getMousePos(0) >= x && Main.f.getMousePos(0) <= (x+width)
-				&& Main.f.getMousePos(1) >= y && Main.f.getMousePos(1) <= (y+height)
+	public static boolean isOver(int bx, int by, int bwidth, int bheight) {
+		if(Main.f.getMousePos(0) >= bx && Main.f.getMousePos(0) <= (bx+bwidth)
+				&& Main.f.getMousePos(1) >= by && Main.f.getMousePos(1) <= (by+bheight)
 				&& Main.f.getMouse()){
 			return true;
 		}return false;
+	}
+	
+	public boolean isOver() {
+		return isOver(x,y,width,height);
 	}
 	
 	public void setX(int i){x = i;}

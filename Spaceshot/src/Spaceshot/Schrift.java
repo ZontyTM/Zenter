@@ -126,6 +126,8 @@ public class Schrift {
 	
 	public int getX(int i){return x[i];}
 	public int getY(int i){return y[i];}
+	public int getWidth(){return width;}
+	public int getHeight(){return height;}
 	
 	public void setXY(int wertX, int wertY, boolean b){
 		for(int i = 1; i < x.length; i++){

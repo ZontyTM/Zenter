@@ -194,6 +194,7 @@ public class Control {
 					for(int w = 0; w < Main.AllBOption.length; w++){
 						Main.AllBOption[w].ResetDeaktiviert();
 					}
+	    			Achievement.add(10, 2);
 				}
 			}
 			

@@ -26,7 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
 public class Main {
-		static boolean Windows, Mac,  gibtEs = false, SteuerungSet = false, set = false;
+		static boolean Windows, Mac,  gibtEs = false, SteuerungSet = false, set = false, first = true;
 		
 		static float timeSinceLastFrame, time, dif = 2;
 		
@@ -58,6 +58,7 @@ public class Main {
 		static DisplayMode displayModes[];
 		static GraphicsDevice devices[];
 		static Random r = new Random();
+		static Clip song;
 	
 	public static void main(String[] args) {
         if(System.getProperty("os.name").contains("Windows")){
@@ -182,6 +183,7 @@ public class Main {
     			devices[cdevice].setDisplayMode(displayModes[displayMode]);
     			edgeX = 0;
     			edgeY = 0;
+    			Achievement.add(10, 1);
     			
 			}else if(vollbild == 1){
 				//Fenster
@@ -203,6 +205,7 @@ public class Main {
     			devices[cdevice].setFullScreenWindow(null);
     			edgeX = 0;
     			edgeY = 0;
+    			Achievement.add(10, 1);
 				
     		}else{
 				//Fenster mit Rahmen
@@ -328,6 +331,16 @@ public class Main {
         shot = "shot_sound_0.wav";
         explosion = "explosion.wav";
         achievement = "achievement.wav";
+        try {
+            URL url = Main.class.getClassLoader().getResource("Sounds/song.wav");
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+			song = AudioSystem.getClip(audio.getMixerInfo());
+			song.open(audioIn);
+			FloatControl gainControl = (FloatControl) song.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(6.0f); // Reduce volume by 10 decibels.
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	private static void setButtons() {
 		SHead[0] = new Schrift(new String[]{"Spaceshot"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
@@ -438,7 +451,7 @@ public class Main {
 				s.next();
 				Achievement.setLev(0, s.nextInt());
 				for(int i = 0; i < Achievement.count(); i++) {
-					if(i!=9) {Achievement.set(i, s.nextInt());}
+					if(i!=9) {Achievement.fset(i, s.nextInt());}
 				}
 				Achievement.setLev(Achievement.count()-1, s.nextInt());
 				s.close();
@@ -508,6 +521,10 @@ public class Main {
     		Button.setLang(Button.getLang()+1);
     		Buttons[4].setPic("Icons/flag_"+Button.getLang());
     	}
+    	
+    	if(Button.isOver(SHead[0].getX(0), SHead[0].getY(0), SHead[0].getWidth(), SHead[0].getHeight()) && Main.f.MousePressCd()){
+    		Achievement.add(10,4);
+    	}
 	}
 	private static void Shop() {
 		pow[8].updateCoin();
@@ -536,11 +553,13 @@ public class Main {
     	Netz(BRaumschiff,SRColor);
     	
     	BRaumschiff[0].isDrueck();
-        if(BRaumschiff[1].isDrueck()) {
+        if(BRaumschiff[1].isDrueck() && first) {
         	saveSettings();
         	p.setX(100);
         	time = 0;
         	dif = 2;
+        	song.loop(10);
+        	first = false;
 		}
     	
     	for(int i = 0; i < SRColor.length; i++) {
@@ -585,11 +604,10 @@ public class Main {
 						enemys.add(new Enemy(5));
 					}
 				}
-//				if(!Enemy.getBoss()) {
-//					enemys.add(new Enemy(5));
-//				}
+				if(!Enemy.getBoss()) {
+					enemys.add(new Enemy(5));
+				}
 
-				pow[8].respawn();
 				if(r.nextInt(15) == 0) {
 					if(Shop.getOne() != -1 && pow[Shop.getLast()] == null) {
 						pow[Shop.getLast()].respawn();
@@ -691,6 +709,7 @@ public class Main {
                     int value = (int) (control.getValue()*100);
                     pb.setValue(value);
                 }
+    			if(SRMaster[0].getWert() == 100) {Achievement.add(10, 3);}
 			} catch (LineUnavailableException e) {
 				e.printStackTrace();
 			}
