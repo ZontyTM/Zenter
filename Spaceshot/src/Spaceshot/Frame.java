@@ -142,6 +142,10 @@ public class Frame extends JFrame{
 			BildDraw((int)b.getBackgroundX(), 0, b.getBackground(b.getActbg()));
 			BildDraw((int)b.getBackgroundX2(), 0, b.getBackground(b.getActbg()));
 		}
+
+        if(Main.menu > 1.1 || Main.menu == 1 || Main.menu == 0.1 || Main.menu == 0.2){
+    		ButtonDraw(Main.BackButton);
+        }
 		
 		if(Main.menu == 0){
 			TextDraw(Main.SHead[0]);
@@ -155,14 +159,14 @@ public class Frame extends JFrame{
 		}else if(Main.menu == 0.1){
 			TextDraw(Main.SHead[1]);
 
-			for (int i = 0; i < Main.BShop.length-1; i++) {
+			for (int i = 0; i < Main.BShop.length; i++) {
 				if(i == 8 && Main.pow[i].getCd()<0) {
 					ButtonDraw(Main.BShop[i], Main.pow[i].getPowerup(),true);
 				}else {
 					ButtonDraw(Main.BShop[i], Main.pow[i].getPowerup(),false);
 				}
 			}
-			ButtonDraw(Main.BShop[Main.BShop.length-1]);
+			//ButtonDraw(Main.BShop[Main.BShop.length-1]);
 			
 			for (int i = 0; i < Shop.getLength(); i++) {
 				if(Shop.isSale(i)) {
@@ -210,9 +214,16 @@ public class Frame extends JFrame{
 					BildDraw(distance, 30, p.getCoin(c), 0.6f);
 				}
 			}
+
+		}else if(Main.menu == 0.2){
+			TextDraw(Main.SHead[2]);
+			
+			for(int i = 0; i < Main.BAchievements.length; i++){
+				ButtonDraw(Main.BAchievements[i]);
+			}
 		
 		}else if(Main.menu == 1){
-			TextDraw(Main.SHead[6]);
+			TextDraw(Main.SHead[3]);
 			for(int i = 0; i < Main.BRaumschiff.length; i++){
 				ButtonDraw(Main.BRaumschiff[i]);
 			}
@@ -229,7 +240,7 @@ public class Frame extends JFrame{
 			
 			if(p.getLives() != 0) {
 
-				TextDraw(Main.BGame[0].getText());
+				if(Mouse) {TextDraw(Main.BGame[0].getText());}
 				
 				for (int i = 0; i < Main.bullets.size(); i++) {
 					BildDraw(Main.bullets.get(i).getX(), Main.bullets.get(i).getY(), Main.bullets.get(i).getPic(), Main.bullets.get(i).getScale());
@@ -326,13 +337,13 @@ public class Frame extends JFrame{
 			//TextDraw(new Schrift("X: " + p.getX() + "  Y: " + p.getY(),20,20,1f,Color.WHITE));
 		
 		}else if(Main.menu == 2){
-			TextDraw(Main.SHead[2]);
+			TextDraw(Main.SHead[4]);
 			for(int i = 0; i < Main.BOptionsMenu.length; i++){
 				ButtonDraw(Main.BOptionsMenu[i]);
 			}
 			
 		}else if(Main.menu == 2.1){
-			TextDraw(Main.SHead[3]);
+			TextDraw(Main.SHead[5]);
 			ButtonDraw(Main.BOptions[0]);
 			
 			if(Main.lastseite != 1 && Mouse){
@@ -352,13 +363,13 @@ public class Frame extends JFrame{
 			}
 			
 		}else if(Main.menu == 2.2){
-			TextDraw(Main.SHead[4]);
+			TextDraw(Main.SHead[6]);
 			for(int i = 0; i < Main.BSounds.length; i++){ButtonDraw(Main.BSounds[i]);}	
 			
 			for(int i = 0; i < Main.SRMaster.length; i++){SchiebereglerDraw(Main.SRMaster[i]);}
 			
 		}else if(Main.menu == 2.3){
-			TextDraw(Main.SHead[5]);
+			TextDraw(Main.SHead[7]);
 			for(int i = 0; i < Main.BGrafik.length; i++){
 				ButtonDraw(Main.BGrafik[i]);
 			}
@@ -369,7 +380,14 @@ public class Frame extends JFrame{
 			TextDraw(Main.SEnde[0]);
 			if(!Mouse){for(int i = 1; i < Main.SEnde.length; i++){TextDraw(Main.SEnde[i]);}}
 		}
-		
+
+		if(Achievement.getLast().size() > 0 && Achievement.getCd() < 30) {
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+			g2d.setColor(Color.BLACK);
+			g2d.fillRect((int)(Main.edgeX/scaleX), (int)(Main.edgeY/scaleY)+49, 600, 100);
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			TextDraw(50, 80, Achievement.getLast().get(0));
+		}
 		//TextDraw(20, 100,"X: " + MousePos[0] + "  Y: " + MousePos[1]);
 		//TextDraw(new Schrift("Time: " + Main.dif,20,20,1f,Color.WHITE));
 		//TextDraw(20, 100,"X: " + Main.buttonX + "  Y: " + Main.buttonY);
@@ -388,20 +406,24 @@ public class Frame extends JFrame{
 				fpsCd = 0.5f; 
 				Tfps = (int)(1/(Main.timeSinceLastFrame));
 			}
-			for (int i = 0; i < Achievement.count(); i++) {
-				Color tempC = null;
-				if(Achievement.isEnd(i)) {tempC = new Color(100, 255, 100);}
-				TextDraw(10, 200+i*30, Achievement.getText(i) + " (" + Achievement.get(i) + "/" + Achievement.getEnd(i) + ")", 0.7f, tempC);
+				for (int i = 0; i < Achievement.count(); i++) {
+					Color tempC = null;
+					if(Achievement.isEnd(i)) {tempC = new Color(100, 255, 100);}
+					TextDraw(10, 200+i*30, Achievement.getText(i) + " (" + Achievement.get(i) + "/" + Achievement.getEnd(i) + ")", 0.7f, tempC);
+				}
+			if(Main.menu == 1.1) {
+				if(Main.enemys.size() != 0 && Enemy.getBoss()) {
+					TextDraw(10, 710,"Count: " + Enemy.getCount());
+					TextDraw(10, 760,"Live: " + Main.enemys.get(0).getLife());
+				}
+				TextDraw(10, 810,"Cd: " + Main.p.getCd2());
+				TextDraw(10, 860,"FPS: " + Tfps);
+				TextDraw(10, 910,"Time: " + Main.time);
+				TextDraw(10, 960,"Dif: " + Main.dif);
+				TextDraw(10, 1010,"Kills: " + Main.p.getKills());
+			}else {
+				TextDraw(10, 10,"Menu: " + Main.menu);
 			}
-			if(Main.enemys.size() != 0 && Enemy.getBoss()) {
-				TextDraw(10, 710,"Count: " + Enemy.getCount());
-				TextDraw(10, 760,"Live: " + Main.enemys.get(0).getLife());
-			}
-			TextDraw(10, 810,"Cd: " + Main.p.getCd2());
-			TextDraw(10, 860,"FPS: " + Tfps);
-			TextDraw(10, 910,"Time: " + Main.time);
-			TextDraw(10, 960,"Dif: " + Main.dif);
-			TextDraw(10, 1010,"Kills: " + Main.p.getKills());
 		}
 	}
 	
@@ -458,6 +480,7 @@ public class Frame extends JFrame{
 			at = AffineTransform.getTranslateInstance(b.getX()+Main.edgeX/scaleX-b.getWidth()*0.05f, b.getY()+Main.edgeY/scaleY-b.getHeight()*0.05f);
 			at.scale(b.getScale()*1.1, b.getScale()*1.1);
 		}else {
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
 			at = AffineTransform.getTranslateInstance(b.getX()+Main.edgeX/scaleX, b.getY()+Main.edgeY/scaleY);
 			at.scale(b.getScale(), b.getScale());
 		}
@@ -468,6 +491,10 @@ public class Frame extends JFrame{
 		}
 		if(b.getName() != null){TextDraw(b.getText());}
         if(b.getName2() != null){TextDraw(b.getText2());}
+
+		if(!(b.isAusgewaehlt() || b.isOver())) {
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+		}
 	}
     public void ButtonKeyDraw(Button b, Schrift text){
 		ButtonDraw(b);
@@ -499,7 +526,6 @@ public class Frame extends JFrame{
     public void TextDraw(Schrift text){
     	if(text != null){
     		//text.setScale(scaleX, scaleY);
-    		
     		for(int i = 0; i < text.getZeichenAnzahl(); i++){
     			AffineTransform at = AffineTransform.getTranslateInstance(text.getX(i)+Main.edgeX/scaleX, text.getY(i)+Main.edgeY/scaleY);
     			at.scale(text.getScale(), text.getScale());

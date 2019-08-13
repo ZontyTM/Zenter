@@ -1,6 +1,12 @@
 package Spaceshot;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Achievement {
+	private static float cd = 0;
+	static List<String> last = new LinkedList<String>();
+	
 	private static String text[][] = {												
 			{"Get startet","Killer!","You were faster!","One Follower less","Shoot back"}, 	//first blood, purple, blue, red, yellow kills (1000)
 			{"Beginner!", "Kill them all!", "It's too easy", "Holy crap!"},  				//kills in one round (100, 250, 500, 1000)
@@ -40,7 +46,10 @@ public class Achievement {
 	
 	private static void test(int x, boolean b) {
 		if(end[x][0] != -1 && progress[x] >= getEnd(x)) {
-			if(b){Main.PlaySound(Main.achievement);}
+			if(b){
+				last.add(text[x][end[x][0]-1]);
+				setText(x);
+			}
 			end[x][0]++;
 			if(end[x][0] >= (end[x].length)) {
 				end[x][0] = -1;
@@ -122,5 +131,40 @@ public class Achievement {
 		}else {
 			return false;
 		}
+	}
+	
+	public static float getCd() {
+		return cd;
+	}
+	public static void setCd() {
+		cd += Main.timeSinceLastFrame*5;
+	}
+	public static void resetCd() {
+		cd = Main.timeSinceLastFrame;
+	}
+	public static void set0() {
+		cd = 0;
+	}
+	public static void delLast() {
+		last.remove(0);
+	}
+	public static List<String> getLast() {
+		return last;
+	}
+	
+	public static void setText(int i) {
+		double temp = get(i)*1000;
+		temp/=getEnd(i);
+		temp+=0.5;
+		temp = (int)(temp);
+		temp/=10;
+		//System.out.println(temp%1);
+		if(temp%1 == 0.0) {
+			int tempI = (int)(temp);
+			Main.BAchievements[i].setText(new String[]{getText(i) + " " + tempI + "%"}, 0.7f);
+		}else {
+			Main.BAchievements[i].setText(new String[]{getText(i) + " " + temp + "%"}, 0.7f);
+		}
+		//System.out.println(i + ": " + Main.BAchievements[i].getText().asString());
 	}
 }

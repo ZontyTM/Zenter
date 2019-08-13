@@ -226,7 +226,7 @@ public class Enemy {
 					Achievement.add(6);
 					Main.p.addCoin(10+r.nextInt(21));
 				}else {
-					if((!Main.p.getCoinC() && (r.nextInt(20) == 0)) || (Main.p.getCoinC() && (r.nextInt(15) == 0))) {
+					if(!boss && (!Main.p.getCoinC() && (r.nextInt(20) == 0)) || (Main.p.getCoinC() && (r.nextInt(15) == 0))) {
 						if(!Main.pow[8].exist()) {
 							Main.pow[8].respawn(x,y);
 						}

@@ -17,6 +17,12 @@ public class Button {
 	private Schrift text, text2;
 	
 
+	
+	public Button(String name[], int x, int y, String buttontext, float scale, double netzX, double netzY, String what, float textScale){
+		this(name, Color.BLACK, null, Color.BLACK, x, y, buttontext, scale, netzX, netzY, what, -1, textScale);
+	}
+	
+
 	public Button(int x, int y, int width, int height, double netzX, double netzY){
 		this(null, null, null, null, Main.StandardWidth/2-width+x, Main.StandardHeight/2-height+y, null, 1, netzX, netzY, "Normal", -1);
 		this.width = width;
@@ -84,6 +90,10 @@ public class Button {
 	}
 	
 	public Button(String[] name, Color c, String[] name2, Color c2, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int page){
+		this(name,c,name2,c2,x,y,buttontext,scale,netzX,netzY,what,page,-1);
+	}
+		
+	public Button(String[] name, Color c, String[] name2, Color c2, int x, int y, String buttontext, float scale, double netzX, double netzY, String what, int page, float textScale){
 		if(!what.contains("Pic")){
 			if(buttontext != null) {
 				try {
@@ -128,7 +138,7 @@ public class Button {
 		}else if(what.contains("Hin")){
 			this.what += 1;
 		}
-		if(what.contains("Back") || what.contains("Hin")){
+		if(what.contains("Back!") || what.contains("Hin")){
 			char temp[] = what.toCharArray();
 			String temp2 = "";
 			for(int i = 0; i < temp.length; i++){
@@ -137,8 +147,8 @@ public class Button {
 					if(i >= 3 && temp[i-3] == 'H' && temp[i-2] == 'i' && temp[i-1] == 'n'){
 						temp2 += temp[i];
 					}
-				}else if(what.contains("Back")){
-					if(i >= 4 && temp[i-4] == 'B' && temp[i-3] == 'a' && temp[i-2] == 'c' && temp[i-1] == 'k'){
+				}else if(what.contains("Back!")){
+					if(i >= 5 && temp[i-5] == 'B' && temp[i-4] == 'a' && temp[i-3] == 'c' && temp[i-2] == 'k' && temp[i-1] == '!'){
 						temp2 += temp[i];
 					}
 				}
@@ -152,7 +162,11 @@ public class Button {
 			this.width = (int)(button[0].getWidth()*scale);
 			this.height = (int)(button[0].getHeight()*scale);
 		}
+		this.scale = scale;
 		this.name = name;
+		if(textScale!=-1) {
+			scale = textScale;
+		}
 		if(name != null) {
 			if(what.contains("SchriftOben")){
 				this.text = new Schrift(name, this.x, this.y-(int)(27*scale), 0.3*scale, c);
@@ -164,7 +178,6 @@ public class Button {
 				this.text2  = new Schrift(name2, this.x, this.y-(int)(27*scale), 0.3*scale, c2);
 			}
 		}
-		this.scale = scale;
 		this.netzX = netzX;
 		this.netzY = netzY;
 		if(page != -1){this.page = page;}
@@ -201,13 +214,21 @@ public class Button {
 			Main.buttonYA = netzY;
 			Main.buttonX = 1;
 			Main.buttonY = 1;
+			Main.lastMenu = Main.menu;
+			Main.menu = menu;
 		
 		}else if(what == 2 || what == 5) {
 			Main.buttonX = Main.buttonXA;
 			Main.buttonY = Main.buttonYA;
+			if(menu == 0) {
+				Main.menu = Main.lastMenu;
+				Main.lastMenu = 0;
+			}else {
+				Main.lastMenu = Main.menu;
+				Main.menu = menu;
+			}
 		}
 		if(what != 0 && what != 3){
-			Main.menu = menu;
 		}
 		if(what == 2 || what == 5){
 			Main.saveSettings();
@@ -303,7 +324,8 @@ public class Button {
 	public int getPage(){return page;}
 	
 	public Schrift getText(){if(visible){return null;} return text;}
-	public void setText(String s[]){text = new Schrift(s, x+(int)(button[0].getWidth()*scale)/2, true, y+(int)(button[0].getHeight()*scale)/2, true, 0.45*scale);}
+	public void setText(String s[]){setText(s,scale);}
+	public void setText(String s[], float Tscale){text = new Schrift(s, x+(int)(button[0].getWidth()*scale)/2, true, y+(int)(button[0].getHeight()*scale)/2, true, 0.45*Tscale);}
 	public Schrift getText2(){if(visible){return null;} return text2;}
 	public void setText2(String s[]){text2 = new Schrift(s, x, (int) (y-23*scale), 0.3*scale);}
 	

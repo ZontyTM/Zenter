@@ -20,6 +20,7 @@ public class Keyboard implements KeyListener{
 			
 			}else if(cooldown[keyCode] <= 0 && keys[keyCode] == true){
 				setCooldown(keyCode,cd);
+				Main.f.setMouse(false);
 				return true;
 			}
 		}

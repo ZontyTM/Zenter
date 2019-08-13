@@ -34,15 +34,34 @@ public class Main {
 				StandardWidth = 1920, StandardHeight = 1080, what, cooldown = 0, volume = 50,
 				displayMode, vollbild = 0, cdevice = 0, color[] = {127,127,127};
 		
-		static double buttonY = 1, buttonX = 1, buttonY2, buttonX2, buttonYA, buttonXA, menu = 0;
+		static double buttonY = 1, buttonX = 1, buttonY2, buttonX2, buttonYA, buttonXA, menu = 0, lastMenu = 0;
 		
 		static long thisFrame;
 		
 		static Control[] steuerung = new Control[12];
-		static Button Buttons[] = new Button[5], BShop[] = new Button[10], BOptions[] = new Button[3], BEnde[] = new Button[2], AllBOption[], BRaumschiff[] = new Button[2], BSteuerung[] = new Button[steuerung.length],
-				AllBStart[], BSideSelection[] = new Button[2], BOptionsMenu[] = new Button[4], BSounds[] = new Button[2], BGrafik[] = new Button[9], BGame[] = new Button[1];
+		
+		static Button BackButton, 
+				//AllBStart[], 
+				Buttons[] = new Button[6], 
+				BEnde[] = new Button[2], 
+				
+				BShop[] = new Button[9], 
+				BAchievements[] = new Button[11],
+				
+				BRaumschiff[] = new Button[1], 
+				
+				BGame[] = new Button[1], 
+				
+				BOptions[] = new Button[2], 
+				BOptionsMenu[] = new Button[3], 
+				BSideSelection[] = new Button[2], 
+				BSteuerung[] = new Button[steuerung.length],
+				AllBOption[], 
+				BSounds[] = new Button[1], 
+				BGrafik[] = new Button[8];
+		
 		static Slide_control SRMaster[] = new Slide_control[1], SRColor[] = new Slide_control[3];
-		static Schrift SEnde[] = new Schrift[3], SSteuerung, SHead[] = new Schrift[7];
+		static Schrift SEnde[] = new Schrift[3], SSteuerung, SHead[] = new Schrift[8];
 		//static PlayController kontroller = new PlayController();
 		static Player p = new Player();
 		static List<Bullet> bullets = new LinkedList<Bullet>();
@@ -111,6 +130,9 @@ public class Main {
             f.setScale(((float)f.getWidth()-(2*Main.edgeX))/Main.StandardWidth, ((float)f.getHeight()-(Main.edgeY+Main.edgeX))/Main.StandardHeight);
 			
     		//kontroller.update();
+            if(menu > 1.1 || menu == 1 || menu == 0.1 || menu == 0.2){
+        		BackButton.isDrueck();
+            }
             
     		if(menu == 0){
             	Mainmenu();
@@ -121,6 +143,9 @@ public class Main {
         		if(Keyboard.isKeyDown(KeyEvent.VK_F7) && Keyboard.isKeyDownCd(KeyEvent.VK_C)) {
         			Main.p.addCoin(100);
         		}
+            	
+    		}else if(menu == 0.1){
+            	Achievement();
             	
     		}else if(menu == 1){
             	ShipSelection();
@@ -150,6 +175,20 @@ public class Main {
             }else if(menu == -1){
             	Exit();
             }
+    		
+    		if(Achievement.getLast().size() > 0) {
+    			if(Achievement.getCd() == 0) {
+    				Main.PlaySound(Main.achievement);
+    				Achievement.resetCd();
+    				
+    			}else if(Achievement.getCd() > 35) {
+    				Achievement.delLast();
+    				Achievement.set0();
+    				
+    			}else {
+    				Achievement.setCd();
+    			}
+    		}
 
 			b.updateBackgroundX(b.getActbg());
     		Fullscreen();
@@ -343,69 +382,89 @@ public class Main {
 		}
 	}
 	private static void setButtons() {
+		BackButton = new Button(new String[]{"Zurück", "Back"}, -80, -80, "", 0.75f, 1, 0, "End Back");
+		
+		
 		SHead[0] = new Schrift(new String[]{"Spaceshot"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
 		Buttons[0] = new Button(new String[]{"Spiel starten", "Start Game"}, 0, -100, "", 1, 1, 1, "Hin1") ;
 		Buttons[1] = new Button(new String[]{"Einstellungen", "Preferences"}, 0, 100, "", 1, 1, 2, "Hin2");
-		Buttons[2] = new Button(new String[]{"Beenden", "Quit"}, 0, 300, "", 1, 1, 3, "Back-1");
-		Buttons[3] = new Button(null, -275, -80, "Icons/shop_icon", 0.5f, 1, 4, "Pic End Mid Hin0.1");
-		Buttons[4] = new Button(null, -125, -80, "Icons/flag_"+Button.getLang(), 0.25f, 2, 4, "Pic End Mid");
+		Buttons[2] = new Button(new String[]{"Beenden", "Quit"}, 0, 300, "", 1, 1, 3, "Back!-1");
+		Buttons[3] = new Button(null, -275, -80, "Icons/shop_icon", 0.5f, 2, 4, "Pic End Mid Hin0.1");
+		Buttons[4] = new Button(null, -125, -80, "Icons/flag_"+Button.getLang(), 0.25f, 3, 4, "Pic End Mid");
+		Buttons[5] = new Button(null, 125, -80, "Icons/achievement", 0.25f, 1, 4, "Pic EndY Normal Hin0.2");
+		
 		
 		SHead[1] = new Schrift(new String[]{"Laden","Shop"}, StandardWidth/2, true, StandardHeight/2-400, true, 1.5, new Color(195, 195, 195));
 		for (int i = 0; i <= Shop.getLength(); i++) {
 			BShop[i] = new Button(-180-64, -230+i*80, pow[i].getPowerup().getWidth(), pow[i].getPowerup().getHeight(), 1, (i+1));
 		}
-		BShop[Shop.getLength()+1] = new Button(new String[]{"Zurück", "Back"}, -80, -80, "", 0.75f, 1, (Shop.getLength()+2), "End Back0");
+		//BShop[Shop.getLength()+1] = new Button(new String[]{"Zurück", "Back"}, -80, -80, "", 0.75f, 1, (Shop.getLength()+2), "End Back");
+
 		
-		BSideSelection[0] = new Button(null, 225, -80, "R", 0.75f, 0, 0, "Normal EndY");
-		BSideSelection[1] = new Button(null, 125, -80, "L", 0.75f, 0, 0, "Normal EndY");
+		SHead[2] = new Schrift(new String[]{"Errungenschaften","Achievements"}, StandardWidth/2, true, StandardHeight/2-400, true, 1.5, new Color(195, 195, 195));
+		for (int i = 0; i < BAchievements.length; i++) {
+			BAchievements[i] = new Button(new String[]{"Error"}, -600+(i%3)*600, -200+(int)(i/3)*200, "", 1, 1, 1, "Mid", 0.5f);
+			Achievement.setText(i);
+		}
+//		BAchievements[0] = new Button(new String[]{String.valueOf(Achievement.getText(0))}, -600, -200, "", 1, 1, 1, "Mid");
+//		BAchievements[1] = new Button(new String[]{String.valueOf(Achievement.getText(1))}, 0, -200, "", 1, 1, 1, "Mid");
+//		BAchievements[2] = new Button(new String[]{String.valueOf(Achievement.getText(2))}, 600, -200, "", 1, 1, 1, "Mid");
 		
-		BOptions[0] = new Button(new String[]{"Zurück", "Back"}, -80, -80, "", 0.75f, 3, 4, "End Back2");
-		BOptions[1] = new Button(new String[]{"Zurücksetzen", "Reset"}, -240, -80, "", 0.75f, 1, 4, "EndY");
-		BOptions[2] = new Button(new String[]{"Letzes", "Last"}, 240, -80, "", 0.75f, 2, 4, "EndY");
 		
-		SHead[2] = new Schrift(new String[]{"Einstellungen","Preferences"}, StandardWidth/2, true, StandardHeight/2-330, true, 1.5, new Color(195, 195, 195));
+		//BAchievements[Shop.getLength()+1] = new Button(new String[]{"Zurück", "Back"}, -80, -80, "", 0.75f, 1, (Shop.getLength()+2), "End Back0");
+		
+		
+        SHead[3] = new Schrift(new String[]{"Raumschiffauswahl","Spaceship Selection"}, StandardWidth/2, true, StandardHeight/2-330, true, 1.5, new Color(195, 195, 195));
+        //BRaumschiff[0] = new Button(new String[]{"Zurück","Back"}, -80, -80, "", 0.75f, 2, 4, "End Back0");
+        BRaumschiff[0] = new Button(new String[]{"Starten","Start"}, -100-(int)(500*0.75f), -80, "", 0.75f, 1, 4, "End Hin1.1");
+        SRColor[0] = new Slide_control(new String[]{"Rot","Red"}, new Color(255,50,50), -300, -100, "Schieberegler", 1, 1, 1, (int)(color[0]/2.54));
+        SRColor[1] = new Slide_control(new String[]{"Grün","Green"}, new Color(50,200,50), -300, 100, "Schieberegler", 1, 1, 2, (int)(color[1]/2.54));
+        SRColor[2] = new Slide_control(new String[]{"Blau","Blue"}, new Color(50,50,255), -300, 300, "Schieberegler", 1, 1, 3, (int)(color[2]/2.54));
+
+        BGame[0] = new Button(new String[]{"X"}, Color.WHITE, 10, -10, "Quadrat", 0.75f, 1, 1, "Back1 Normal EndX");
+        
+        
+		SHead[4] = new Schrift(new String[]{"Einstellungen","Preferences"}, StandardWidth/2, true, StandardHeight/2-330, true, 1.5, new Color(195, 195, 195));
 		BOptionsMenu[0] = new Button(new String[]{"Steuerung", "Controls"}, 0, -100, "", 1, 1, 1, "Hin2.1");
 		BOptionsMenu[1] = new Button(new String[]{"Ton", "Sounds"}, 0, 100, "", 1, 1, 2, "Hin2.2");
 		BOptionsMenu[2] = new Button(new String[]{"Grafik", "Graphics"}, 0, 300, "", 1, 1, 3, "Hin2.3");
-		BOptionsMenu[3] = new Button(new String[]{"Zurück", "Back"}, -80, -80, "", 0.75f, 1, 4, "End Back0");
+		//BOptionsMenu[3] = new Button(new String[]{"Zurück", "Back"}, -80, -80, "", 0.75f, 1, 4, "End Back0");
 		
-		SHead[3] = new Schrift(new String[]{"Steuerung","Controls"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
+		BSideSelection[0] = new Button(null, 225, -80, "R", 0.75f, 0, 0, "Normal EndY");
+		BSideSelection[1] = new Button(null, 125, -80, "L", 0.75f, 0, 0, "Normal EndY");
+		//BOptions[0] = new Button(new String[]{"Zurück", "Back"}, -80, -80, "", 0.75f, 3, 4, "End Back2");
+		BOptions[0] = new Button(new String[]{"Zurücksetzen", "Reset"}, -240, -80, "", 0.75f, 1, 4, "EndY");
+		BOptions[1] = new Button(new String[]{"Letzes", "Last"}, 240, -80, "", 0.75f, 2, 4, "EndY");
+		
+		SHead[5] = new Schrift(new String[]{"Steuerung","Controls"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
 		SSteuerung = new Schrift(new String[]{"Drücke eine beliebige Taste","Press any key"}, 0, 0, 0.27);
 
-		SHead[4] = new Schrift(new String[]{"Ton","Sounds"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
+		SHead[6] = new Schrift(new String[]{"Ton","Sounds"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
 		SRMaster[0] = new Slide_control(new String[]{"Gesamt","Master"}, new Color(195, 195, 195), 0, 0, "Schieberegler", 1, 1, 1, volume);
-        BSounds[1] = new Button(new String[]{szmixers[whatmixer]}, 0, 200, "", 1f, 1, 2);
-		BSounds[0] = new Button(new String[]{"Zurück","Back"}, -80, -80, "", 0.75f, 1, 3, "End Back2");
+        BSounds[0] = new Button(new String[]{szmixers[whatmixer]}, 0, 200, "", 1f, 1, 2);
+		//BSounds[0] = new Button(new String[]{"Zurück","Back"}, -80, -80, "", 0.75f, 1, 3, "End Back2");
 
-		SHead[5] = new Schrift(new String[]{"Grafik","Graphics"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
-        BGrafik[1] = new Button(new String[]{String.valueOf(displayModes[displayMode].getWidth())}, new String[]{"Breite:","Width:"}, -275, -100, "", 0.85f, 1, 1);
-        BGrafik[2] = new Button(new String[]{String.valueOf(displayModes[displayMode].getHeight())}, new String[]{"Höhe:","Height:"}, 275, -100, "", 0.85f, 2, 1);
-        BGrafik[3] = new Button(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())}, new String[]{"FPS:"}, -275, 75, "", 0.85f, 1, 2);
-        BGrafik[4] = new Button(new String[]{String.valueOf(cdevice)}, new String[]{"Monitor:","Screen:"}, 275, 75, "", 0.85f, 2, 2);
-		BGrafik[5] = new Button(null, 225, -80, "R", 0.75f, 1, 4, "Normal EndY");
-		BGrafik[6] = new Button(null, 125, -80, "L", 0.75f, 0, 4, "Normal EndY");
-        BGrafik[7] = new Button(new String[]{"Vollbild","Fullscreen"}, new String[]{"Vollbild:","Fullscreen:"}, -275, 250, "", 0.85f, 1, 3);
-        BGrafik[8] = new Button(new String[]{b.getName(1),b.getName(0)}, new String[]{"Hintergrund:","Background:"}, 275, 250, "", 0.85f, 2, 3);
+		SHead[7] = new Schrift(new String[]{"Grafik","Graphics"}, StandardWidth/2, true, StandardHeight/2-350, true, 2, new Color(195, 195, 195));
+        BGrafik[0] = new Button(new String[]{String.valueOf(displayModes[displayMode].getWidth())}, new String[]{"Breite:","Width:"}, -275, -100, "", 0.85f, 1, 1);
+        BGrafik[1] = new Button(new String[]{String.valueOf(displayModes[displayMode].getHeight())}, new String[]{"Höhe:","Height:"}, 275, -100, "", 0.85f, 2, 1);
+        BGrafik[2] = new Button(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())}, new String[]{"FPS:"}, -275, 75, "", 0.85f, 1, 2);
+        BGrafik[3] = new Button(new String[]{String.valueOf(cdevice)}, new String[]{"Monitor:","Screen:"}, 275, 75, "", 0.85f, 2, 2);
+		BGrafik[4] = new Button(null, 225, -80, "R", 0.75f, 1, 4, "Normal EndY");
+		BGrafik[5] = new Button(null, 125, -80, "L", 0.75f, 0, 4, "Normal EndY");
+        BGrafik[6] = new Button(new String[]{"Vollbild","Fullscreen"}, new String[]{"Vollbild:","Fullscreen:"}, -275, 250, "", 0.85f, 1, 3);
+        BGrafik[7] = new Button(new String[]{b.getName(1),b.getName(0)}, new String[]{"Hintergrund:","Background:"}, 275, 250, "", 0.85f, 2, 3);
 		if(vollbild == 1){
 			BGrafik[7].setText(new String[]{"Fenster","Window"});
 			for(int i = 1; i <= 6; i++){
 				BGrafik[i].setVisible(true);
 			}
 		}
-		BGrafik[0] = new Button(new String[]{"Zurück","Back"}, -80, -80, "", 0.75f, 2, 4, "End Back2");
-        
+		//BGrafik[0] = new Button(new String[]{"Zurück","Back"}, -80, -80, "", 0.75f, 2, 4, "End Back2");
+		
+		
         SEnde[0] = new Schrift(new String[]{"Willst du wirklich beenden?","Do you really want to quit?"}, StandardWidth/2, true, StandardHeight/2-100, true, 0.75, new Color(195, 195, 195));
         BEnde[0] = new Button(new String[]{"Ja","Yes"}, -240, 100, "", 0.85f, 1, 1, "Hin-1");
         BEnde[1] = new Button(new String[]{"Nein","No"}, 240, 100, "", 0.85f, 2, 1, "Back0");
-        
-        BRaumschiff[0] = new Button(new String[]{"Zurück","Back"}, -80, -80, "", 0.75f, 2, 4, "End Back0");
-        BRaumschiff[1] = new Button(new String[]{"Starten","Start"}, -100-BRaumschiff[0].getWidth(), -80, "", 0.75f, 1, 4, "End Hin1.1");
-        SHead[6] = new Schrift(new String[]{"Raumschiffauswahl","Spaceship Selection"}, StandardWidth/2, true, StandardHeight/2-330, true, 1.5, new Color(195, 195, 195));
-        SRColor[0] = new Slide_control(new String[]{"Rot","Red"}, new Color(255,50,50), -300, -100, "Schieberegler", 1, 1, 1, (int)(color[0]/2.54));
-        SRColor[1] = new Slide_control(new String[]{"Grün","Green"}, new Color(50,200,50), -300, 100, "Schieberegler", 1, 1, 2, (int)(color[1]/2.54));
-        SRColor[2] = new Slide_control(new String[]{"Blau","Blue"}, new Color(50,50,255), -300, 300, "Schieberegler", 1, 1, 3, (int)(color[2]/2.54));
-
-        BGame[0] = new Button(new String[]{"X"}, Color.WHITE, -1, -StandardHeight+90, "Quadrat", 0.75f, 1, 1, "Back1");
 	}
 	
 	private static void setLang() {
@@ -504,32 +563,28 @@ public class Main {
 	
 	private static void Mainmenu() {
 		Netz(Buttons);
-    	//setScale(Buttons);
-    	if(Buttons[2].isDrueck()){
-    		SEnde[1] = new Schrift(new String[]{"(" + steuerung[7].getKeyName() + ")"}, BEnde[0].getX()+BEnde[0].getWidth()/2, true, BEnde[0].getY()+BEnde[0].getHeight()/2+35, true, 0.3*BEnde[0].getScale());
-    		SEnde[2] = new Schrift(new String[]{"(" + steuerung[6].getKeyName() + ")"}, BEnde[1].getX()+BEnde[1].getWidth()/2, true, BEnde[1].getY()+BEnde[1].getHeight()/2+35, true, 0.3*BEnde[1].getScale());
-    	}
-    	if(Buttons[3].isDrueck()) {
-    		if(Shop.getUpgrade(0) == null) {
-        		Shop.setUpgrade();
-    		}
-    	}
-    	Buttons[1].isDrueck();
-    	Buttons[0].isDrueck();
-    	
-    	if(Buttons[4].isDrueck()){
-    		Button.setLang(Button.getLang()+1);
-    		Buttons[4].setPic("Icons/flag_"+Button.getLang());
-    	}
-    	
+		//Test of the text Spaceshot
     	if(Button.isOver(SHead[0].getX(0), SHead[0].getY(0), SHead[0].getWidth(), SHead[0].getHeight()) && Main.f.MousePressCd()){
     		Achievement.add(10,4);
     	}
+    	//setScale(Buttons);
+		for (int i = 0; i < Buttons.length; i++) {
+			if(i == 2 && Buttons[i].isDrueck()) {
+	    		SEnde[1] = new Schrift(new String[]{"(" + steuerung[7].getKeyName() + ")"}, BEnde[0].getX()+BEnde[0].getWidth()/2, true, BEnde[0].getY()+BEnde[0].getHeight()/2+35, true, 0.3*BEnde[0].getScale());
+	    		SEnde[2] = new Schrift(new String[]{"(" + steuerung[6].getKeyName() + ")"}, BEnde[1].getX()+BEnde[1].getWidth()/2, true, BEnde[1].getY()+BEnde[1].getHeight()/2+35, true, 0.3*BEnde[1].getScale());
+			}else if(i == 3 && Buttons[i].isDrueck() && Shop.getUpgrade(0) == null) {
+	        	Shop.setUpgrade();
+			}else if(i == 4 && Buttons[i].isDrueck()) {
+	    		Button.setLang(Button.getLang()+1);
+	    		Buttons[4].setPic("Icons/flag_"+Button.getLang());
+			}else if(Buttons[i].isDrueck()) {}
+		}
 	}
 	private static void Shop() {
+		Netz(BShop, 1, (Shop.getLength()+2));
+		
 		pow[8].updateCoin();
-		Netz(BShop);
-		if(BShop[Shop.getLength()+1].isDrueck() && pow[9].hasPlayer()) {
+		if(BackButton.isDrueck() && pow[9].hasPlayer()) {
 			Shop.resetSale();
 			Shop.setCost();
 			menu = 1.1;
@@ -546,14 +601,21 @@ public class Main {
 			}
 		}
 	}
+	private static void Achievement() {
+		//Netz(BShop, 1, (Shop.getLength()+2));
+	}
 	private static void ShipSelection() {
 		//setScale(BRaumschiff);
 		//setScale(SRColor);
-		
-    	Netz(BRaumschiff,SRColor);
+    	Netz(BRaumschiff, SRColor, 2, 4);
     	
-    	BRaumschiff[0].isDrueck();
-        if(BRaumschiff[1].isDrueck() && first) {
+    	if(BackButton.isDrueck()) {
+			Main.buttonX = 1;
+			Main.buttonY = 1;
+    	}
+    	
+        if(BRaumschiff[0].isDrueck() && first) {
+        	BRaumschiff[0].setText(new String[]{"Weiter","Continue"});
         	saveSettings();
         	p.setX(100);
         	time = 0;
@@ -625,7 +687,7 @@ public class Main {
 	private static void Settings() {
 		//setScale(BOptionsMenu);
 		
-    	Netz(BOptionsMenu);
+    	Netz(BOptionsMenu, 1, 4);
     	
     	for(int i = 0; i < BOptionsMenu.length; i++){
     		BOptionsMenu[i].isDrueck();
@@ -638,15 +700,17 @@ public class Main {
 			}
 		}
     	
-    	AllBOption = setArray(AllBOption, BSteuerung, BOptions);
+    	AllBOption = setArray(BSteuerung, BOptions);
+		BackButton.setNX(3);
+		BackButton.setNY(4);
+    	AllBOption = setArray(AllBOption, BackButton);
     	
 		//setScale(AllBOption);
 		
 		//setScale(BSideSelection);
-    	
     	NetzMitSeiten(AllBOption, BSteuerung, BOptions);
     
-    	if(BOptions[0].isDrueck()){
+    	if(BackButton.isDrueck()){
 			for(int i = 0; i < steuerung.length; i++){
 				steuerung[i].getButton().ResetDeaktiviert(); 
 				steuerung[i].setKey2(steuerung[i].getKey());
@@ -664,10 +728,10 @@ public class Main {
         	else{BSideSelection[0].ResetDeaktiviert(); BSideSelection[1].ResetDeaktiviert();}
     	}
     	
-    	if(BOptions[1].isDrueck()){
+    	if(BOptions[0].isDrueck()){
     		for(int j = 0; j < steuerung.length; j++){steuerung[j].setKey2(steuerung[j].getKey()); steuerung[j].setKey(steuerung[j].getDefaultKey());}
     	}
-    	if(BOptions[2].isDrueck()){
+    	if(BOptions[1].isDrueck()){
     		for(int j = 0; j < steuerung.length; j++){steuerung[j].setKey(steuerung[j].getKey2());}
     	}
 	}
@@ -675,15 +739,15 @@ public class Main {
 		//setScale(BSounds);
 		//setScale(SRMaster);
 		
-    	Netz(BSounds, SRMaster);
+    	Netz(BSounds, SRMaster, 1, 3);
     	
-    	if(BSounds[0].isDrueck()){
+    	if(BackButton.isDrueck()){
     		volume = SRMaster[0].getWert();
-    		audiogeret = BSounds[1].getText().asString();
+    		audiogeret = BSounds[0].getText().asString();
 			saveSettings();
     	}
     	
-    	if(BSounds[1].isDrueck()){
+    	if(BSounds[0].isDrueck()){
 //    		Mixer.Info mixers2[] = AudioSystem.getMixerInfo();
 //    		System.out.println("|");
 //    	    for(int i = 0; i < mixers2.length; i++){
@@ -718,40 +782,40 @@ public class Main {
 	}
 	private static void GraficSettings() {
 		//setScale(BGrafik);
-    	Netz(BGrafik);
+    	Netz(BGrafik, 2, 4);
     	
-    	BGrafik[0].isDrueck();
+    	//BGrafik[0].isDrueck();
     	
-    	if(BGrafik[1].isDrueck() || BGrafik[2].isDrueck() || BGrafik[3].isDrueck() || BGrafik[5].isDrueck()){
+    	if(BGrafik[0].isDrueck() || BGrafik[1].isDrueck() || BGrafik[2].isDrueck() || BGrafik[4].isDrueck()){
     		if(displayMode >= displayModes.length-1){displayMode = -1;}
     		displayMode += 1;
-    		BGrafik[1].setText(new String[]{String.valueOf(displayModes[displayMode].getWidth())});
-    		BGrafik[2].setText(new String[]{String.valueOf(displayModes[displayMode].getHeight())});
-    		BGrafik[3].setText(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())});
+    		BGrafik[0].setText(new String[]{String.valueOf(displayModes[displayMode].getWidth())});
+    		BGrafik[1].setText(new String[]{String.valueOf(displayModes[displayMode].getHeight())});
+    		BGrafik[2].setText(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())});
     		
-    	}else if(BGrafik[6].isDrueck()){
+    	}else if(BGrafik[5].isDrueck()){
     		if(displayMode <= 0){displayMode = displayModes.length;}
     		displayMode -= 1;
-    		BGrafik[1].setText(new String[]{String.valueOf(displayModes[displayMode].getWidth())});
-    		BGrafik[2].setText(new String[]{String.valueOf(displayModes[displayMode].getHeight())});
-    		BGrafik[3].setText(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())});
+    		BGrafik[0].setText(new String[]{String.valueOf(displayModes[displayMode].getWidth())});
+    		BGrafik[1].setText(new String[]{String.valueOf(displayModes[displayMode].getHeight())});
+    		BGrafik[2].setText(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())});
     	}
     	
-    	if(BGrafik[4].isDrueck()){
+    	if(BGrafik[3].isDrueck()){
     		if(cdevice >= devices.length-1){cdevice = -1;}
     		cdevice += 1;
-    		BGrafik[4].setText(new String[]{String.valueOf(cdevice)});
+    		BGrafik[3].setText(new String[]{String.valueOf(cdevice)});
     		displayModes = devices[cdevice].getDisplayModes();
     		displayMode = displayModes.length-1;
-    		BGrafik[1].setText(new String[]{String.valueOf(displayModes[displayMode].getWidth())});
-    		BGrafik[2].setText(new String[]{String.valueOf(displayModes[displayMode].getHeight())});
-    		BGrafik[3].setText(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())});
+    		BGrafik[0].setText(new String[]{String.valueOf(displayModes[displayMode].getWidth())});
+    		BGrafik[1].setText(new String[]{String.valueOf(displayModes[displayMode].getHeight())});
+    		BGrafik[2].setText(new String[]{String.valueOf(displayModes[displayMode].getRefreshRate())});
     	}
     	
-    	if(BGrafik[7].isDrueck()){
+    	if(BGrafik[6].isDrueck()){
     		if(vollbild == 0){
     			vollbild = 1; 
-    			BGrafik[7].setText(new String[]{"Fenster","Window"});
+    			BGrafik[6].setText(new String[]{"Fenster","Window"});
     			for(int i = 1; i <= 6; i++){
     				BGrafik[i].setVisible(true);
     			}
@@ -760,19 +824,19 @@ public class Main {
     		else if(vollbild == 1 || vollbild == -1){
         		if(vollbild == -1){Keyboard.setKey(steuerung[0].getKey());}
     			vollbild = 0;
-    			BGrafik[7].setText(new String[]{"Vollbild","Fullscreen"});
+    			BGrafik[6].setText(new String[]{"Vollbild","Fullscreen"});
     			for(int i = 1; i <= 6; i++){
     				BGrafik[i].setVisible(false);
     			}
     		}
     	}
-    	if(BGrafik[8].isDrueck()){
+    	if(BGrafik[7].isDrueck()){
     		if(b.getActbg() == 6) {
     			b.setActbg(0);
     		}else {
         		b.setActbg(b.getActbg()+1);
     		}
-			BGrafik[8].setText(new String[]{b.getName(1),b.getName(0)});
+			BGrafik[7].setText(new String[]{b.getName(1),b.getName(0)});
     	}
 	}
 	private static void Exit() {
@@ -793,30 +857,48 @@ public class Main {
 		}
 	}
 	
-	public static Button[] setArray(Button[] buttons, Button[] buttonsS, Button[] buttonsO){
-		Control.HMPage = 0;
-		for(int i = 0; i < buttonsS.length; i++){
-			if(seite == buttonsS[i].getPage()){
-				Control.HMPage += 1;
-			}
-		}
+	public static Button[] setArray(Button[] buttonsS, Button buttonsO){
+		Button[] result = new Button[buttonsS.length + 1];
+		result[0] = buttonsO;
+		System.arraycopy(buttonsS, 0, result, 1, buttonsS.length);
+		return result;
+	}
+	public static Button[] setArray(Button[] buttonsS, Button[] buttonsO){
+//		Control.HMPage = 0;
+//		for(int i = 0; i < buttonsS.length; i++){
+//			if(seite == buttonsS[i].getPage()){
+//				Control.HMPage += 1;
+//			}
+//		}
 		
-		buttons = new Button[buttonsO.length + Control.HMPage];
-		for(int j = 0; j < buttonsO.length; j++){
-			buttons[j] = buttonsO[j];
-		}
-		int allwert = buttonsO.length;
-		for(int j = 0; j < buttonsS.length; j++){
-			if(seite == buttonsS[j].getPage()){
-				buttons[allwert] = buttonsS[j];
-				allwert += 1;
-			}
-		}
-		return buttons;
+		Button[] result = new Button[buttonsS.length + buttonsO.length];
+		System.arraycopy(buttonsS, 0, result, 0, buttonsS.length);
+		System.arraycopy(buttonsO, 0, result, buttonsS.length, buttonsO.length);
+//		buttons = new Button[buttonsO.length + Control.HMPage];
+//		for(int j = 0; j < buttonsO.length; j++){
+//			buttons[j] = buttonsO[j];
+//		}
+//		int allwert = buttonsO.length;
+//		for(int j = 0; j < buttonsS.length; j++){
+//			if(seite == buttonsS[j].getPage()){
+//				buttons[allwert] = buttonsS[j];
+//				allwert += 1;
+//			}
+//		}
+		return result;
 	}
 	
 	public static void Netz(Button[] buttons){
 		Netz(buttons, null);
+	}
+
+	public static void Netz(Button[] buttons, int x, int y){
+		Netz(buttons, null, x, y);
+	}
+	public static void Netz(Button[] buttons, Slide_control[] schieberegler, int x, int y){
+		BackButton.setNX(x);
+		BackButton.setNY(y);
+		Netz(setArray(buttons,BackButton), schieberegler);
 	}
 	
 	public static void Netz(Button[] buttons, Slide_control[] schieberegler){
@@ -1103,7 +1185,7 @@ public class Main {
 						if(buttonsS[i].getNX() >= (buttonX-0.5) && buttonsS[i].getNX() <= (buttonX+0.5) && buttonsS[i].getNY() == buttonY && !(f.getMouse())){
 							gibtEs = true;
 							seite += 1;
-							buttons = setArray(buttons, buttonsS, buttonsO);
+							buttons = setArray(buttonsS, buttonsO);
 							for(int j = 0; j < buttons.length; j++){
 				        		if(buttons[j].getNY() == buttonY && buttons[j].getNX() < (buttonX - 0.5)){
 				        			if(buttonX2 == -1){buttonX2 = buttons[j].getNX();}
@@ -1138,7 +1220,7 @@ public class Main {
 						if(buttonsS[i].getNX() >= (buttonX-0.5) && buttonsS[i].getNX() <= (buttonX+0.5) && buttonsS[i].getNY() == buttonY && !(f.getMouse())){
 							gibtEs = true;
 							seite -= 1;
-							buttons = setArray(buttons, buttonsS, buttonsO);
+							buttons = setArray(buttonsS, buttonsO);
 							for(int j = 0; j < buttons.length; j++){
 				        		if(buttons[j].getNY() == buttonY && buttons[j].getNX() > (buttonX + 0.5)){
 				        			if(buttonX2 == -1){buttonX2 = buttons[j].getNX();}
