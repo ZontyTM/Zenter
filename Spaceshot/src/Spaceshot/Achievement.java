@@ -66,7 +66,7 @@ public class Achievement {
 	}
 	public static void set(int x, int y, boolean b) {
 		progress[x] = y;
-		test(x,true);
+		test(x,b);
 	}
 	
 	public static void addM(int x, int y) {

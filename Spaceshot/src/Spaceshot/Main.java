@@ -336,8 +336,8 @@ public class Main {
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
 			song = AudioSystem.getClip(audio.getMixerInfo());
 			song.open(audioIn);
-			FloatControl gainControl = (FloatControl) song.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(6.0f); // Reduce volume by 10 decibels.
+//			FloatControl gainControl = (FloatControl) song.getControl(FloatControl.Type.MASTER_GAIN);
+//			gainControl.setValue(6.0f); // Reduce volume by 10 decibels.
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -558,7 +558,8 @@ public class Main {
         	p.setX(100);
         	time = 0;
         	dif = 2;
-        	song.loop(10);
+			song.setMicrosecondPosition(0);
+        	song.loop(0);
         	first = false;
 		}
     	
@@ -588,10 +589,10 @@ public class Main {
 	    	if(time%(dif) >= 0 && time%(dif) <= 0.1 && !set) {
 	    		if(!Enemy.getBoss()) {
 	    			enemys.add(new Enemy(r.nextInt(4)+1));
-					
-					if((!p.getCoinC() && r.nextInt(4) == 0) || (p.getCoinC() && r.nextInt(3) == 0)) {
-						if(!pow[8].exist()) {
-							pow[8].respawn();;
+
+					if((!Main.p.getCoinC() && (r.nextInt(25) == 0)) || (Main.p.getCoinC() && (r.nextInt(20) == 0))) {
+						if(!Main.pow[8].exist()) {
+							Main.pow[8].respawn();
 						}
 					}
 	    		}
@@ -604,9 +605,9 @@ public class Main {
 						enemys.add(new Enemy(5));
 					}
 				}
-				if(!Enemy.getBoss()) {
-					enemys.add(new Enemy(5));
-				}
+//				if(!Enemy.getBoss()) {
+//					enemys.add(new Enemy(5));
+//				}
 
 				if(r.nextInt(15) == 0) {
 					if(Shop.getOne() != -1 && pow[Shop.getLast()] == null) {

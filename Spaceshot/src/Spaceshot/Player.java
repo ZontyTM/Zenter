@@ -359,7 +359,7 @@ public class Player {
 	public void setCoinC(boolean b){
 		coinC = b;
 		if(coinC) {
-			Achievement.add(9);
+			Achievement.fadd(9);
 		}
 	}
 	

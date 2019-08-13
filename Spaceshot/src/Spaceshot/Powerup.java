@@ -48,11 +48,19 @@ public class Powerup {
 		this.x = Main.StandardWidth;
 		this.bounding = new Rectangle(this.x, this.y, pic[0].getWidth(), pic[0].getHeight());
 	}
-	public void respawn() {
+	public void respawn(int x, int y) {
 		this.speed = r.nextInt(150)+150;
-		this.y = r.nextInt(Main.StandardHeight-(int)(this.pic[0].getHeight()));
+		this.y = y;
 		this.bounding.y = this.y;
+		if(x!=-1) {
+			this.x = x;
+			this.bounding.x = this.x;
+		}
 		exist = true;
+	}
+	
+	public void respawn() {
+		respawn(-1,r.nextInt(Main.StandardHeight-(int)(this.pic[0].getHeight())));
 	}
 	
 	public void update() {
